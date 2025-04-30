@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CartService {
 
@@ -22,7 +24,7 @@ public class CartService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public CartItemResponse scanItem(Long itemId){
+    public CartItemResponse scanItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item not found, ID: " + itemId));
 
@@ -48,6 +50,25 @@ public class CartService {
                 item.getUnitPrice(),
                 savedItem.getQuantity()
         );
+
     }
+
+    public List<CartItemResponse> getCartContents() {
+        List<CartItemResponse> contents = cartItemRepository.findAll().stream()
+                .map(cartItem -> {
+                    Item item = cartItem.getItem();
+                    return new CartItemResponse(
+                            item.getId(),
+                            item.getName(),
+                            item.getUnitPrice(),
+                            cartItem.getQuantity()
+                    );
+                })
+                .toList();
+
+        logger.info("Retrieved {} item(s) from cart", contents.size());
+        return contents;
+    }
+
 
 }
