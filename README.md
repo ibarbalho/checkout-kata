@@ -23,3 +23,6 @@ If a customer scans an Apple, a Banana, and another Apple, the system should rec
 * Angular 19
 * Signals
 * Bootstrap
+
+### Access Swagger UI at: http://localhost:8080/swagger-ui.html
+
