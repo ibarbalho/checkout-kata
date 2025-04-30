@@ -3,6 +3,7 @@ package com.checkoutkata.service;
 import com.checkoutkata.domain.Item;
 import com.checkoutkata.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ItemService {
 
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
