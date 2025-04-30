@@ -3,6 +3,7 @@ package com.checkoutkata.service;
 import com.checkoutkata.domain.CartItem;
 import com.checkoutkata.domain.Item;
 import com.checkoutkata.dto.CartItemResponse;
+import com.checkoutkata.dto.CartTotalResponse;
 import com.checkoutkata.repository.CartItemRepository;
 import com.checkoutkata.repository.ItemRepository;
 import org.slf4j.Logger;
@@ -42,8 +43,6 @@ public class CartService {
 
         CartItem savedItem = cartItemRepository.save(cartItem);
 
-        logger.info("Item '{}' scanned. Quantity in cart: {}", item.getName(), savedItem.getQuantity());
-
         return new CartItemResponse(
                 item.getId(),
                 item.getName(),
@@ -54,7 +53,7 @@ public class CartService {
     }
 
     public List<CartItemResponse> getCartContents() {
-        List<CartItemResponse> contents = cartItemRepository.findAll().stream()
+        return cartItemRepository.findAll().stream()
                 .map(cartItem -> {
                     Item item = cartItem.getItem();
                     return new CartItemResponse(
@@ -66,8 +65,21 @@ public class CartService {
                 })
                 .toList();
 
-        logger.info("Retrieved {} item(s) from cart", contents.size());
-        return contents;
+    }
+
+    public CartTotalResponse calculateTotal() {
+        List<CartItem> cartItems = cartItemRepository.findAll();
+        int total = 0;
+
+        for (CartItem cartItem : cartItems) {
+            int unitPrice = cartItem.getItem().getUnitPrice();
+            int quantity = cartItem.getQuantity();
+
+            // TODO: apply offers
+            total += unitPrice * quantity;
+        }
+
+        return new CartTotalResponse(total);
     }
 
 
