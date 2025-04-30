@@ -3,19 +3,18 @@ package com.checkoutkata.service;
 import com.checkoutkata.domain.CartItem;
 import com.checkoutkata.domain.Item;
 import com.checkoutkata.domain.Offer;
-import com.checkoutkata.dto.CartItemResponse;
-import com.checkoutkata.dto.CartTotalResponse;
 import com.checkoutkata.repository.CartItemRepository;
 import com.checkoutkata.repository.ItemRepository;
 import com.checkoutkata.repository.OfferRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class CartService {
 
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
@@ -30,76 +29,54 @@ public class CartService {
         this.offerRepository = offerRepository;
     }
 
-    public CartItemResponse scanItem(Long itemId) {
+    public CartItem addToCart(Long itemId) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("Item not found, ID: " + itemId));
+                .orElseThrow(() -> new IllegalArgumentException("Item not found: " + itemId));
 
-        CartItem cartItem = cartItemRepository.findByItemId(itemId)
-                .map(existingItem -> {
-                    existingItem.setQuantity(existingItem.getQuantity() + 1);
-                    return existingItem;
-                })
-                .orElseGet(() -> {
-                    CartItem newCartItem = new CartItem();
-                    newCartItem.setItem(item);
-                    newCartItem.setQuantity(1);
-                    return newCartItem;
-                });
-
-        CartItem savedItem = cartItemRepository.save(cartItem);
-
-        return new CartItemResponse(
-                item.getId(),
-                item.getName(),
-                item.getUnitPrice(),
-                savedItem.getQuantity()
-        );
-
+        return cartItemRepository.findByItemId(itemId)
+                .map(this::incrementQuantity)
+                .orElseGet(() -> createNewCartItem(item));
     }
 
-    public List<CartItemResponse> getCartContents() {
+    public List<CartItem> getCartContents() {
+        return cartItemRepository.findAll();
+    }
+
+    public int calculateTotal() {
         return cartItemRepository.findAll().stream()
-                .map(cartItem -> {
-                    Item item = cartItem.getItem();
-                    return new CartItemResponse(
-                            item.getId(),
-                            item.getName(),
-                            item.getUnitPrice(),
-                            cartItem.getQuantity()
-                    );
-                })
-                .toList();
-
+                .mapToInt(this::calculateItemTotal)
+                .sum();
     }
 
-    public CartTotalResponse calculateTotal() {
-        List<CartItem> cartItems = cartItemRepository.findAll();
-        int total = 0;
-
-        for (CartItem cartItem : cartItems) {
-            Item item = cartItem.getItem();
-            int quantity = cartItem.getQuantity();
-            int unitPrice = item.getUnitPrice();
-
-            Optional<Offer> offerOpt = offerRepository.findByItem(item);
-
-            if (offerOpt.isPresent()) {
-                Offer offer = offerOpt.get();
-                int offerGroup = quantity / offer.getQuantity();
-                int remainder = quantity % offer.getQuantity();
-
-                int offerTotal = offerGroup * offer.getTotalPrice();
-                int normalTotal = remainder * unitPrice;
-
-                total += offerTotal + normalTotal;
-            } else {
-                total += quantity * unitPrice;
-            }
-        }
-
-        return new CartTotalResponse(total);
+    private CartItem incrementQuantity(CartItem item) {
+        item.setQuantity(item.getQuantity() + 1);
+        return cartItemRepository.save(item);
     }
 
+    private CartItem createNewCartItem(Item item) {
+        CartItem cartItem = new CartItem();
+        cartItem.setItem(item);
+        cartItem.setQuantity(1);
+        return cartItemRepository.save(cartItem);
+    }
 
+    private int calculateItemTotal(CartItem cartItem) {
+        Item item = cartItem.getItem();
+        int quantity = cartItem.getQuantity();
+
+        return offerRepository.findByItem(item)
+                .map(offer -> calculateWithOffer(offer, quantity, item.getUnitPrice()))
+                .orElseGet(() -> quantity * item.getUnitPrice());
+    }
+
+    private int calculateWithOffer(Offer offer, int quantity, int unitPrice) {
+        int offerGroups = quantity / offer.getQuantity();
+        int remainder = quantity % offer.getQuantity();
+        return (offerGroups * offer.getTotalPrice()) + (remainder * unitPrice);
+    }
+
+    public void clearCart() {
+        cartItemRepository.deleteAll();
+    }
 
 }
