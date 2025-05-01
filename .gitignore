@@ -19,15 +19,13 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# IntelliJ IDEA
+# IDEs and editors
 .idea/
 *.iml
 *.iws
 *.ipr
 .idea_modules/
 out/
-
-# VS Code
 .vscode/
 *.code-workspace
 .settings/
@@ -35,40 +33,11 @@ out/
 .project
 .factorypath
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Test reports and coverage
-test-output/
-coverage/
-.coverage
-.tox/
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-
-# Gradle
-.gradle/
-build/
-
 # Node and NPM
 node_modules/
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 .pnp/
 .pnp.js
 
@@ -81,42 +50,36 @@ tmp/
 src/**/*.generated.*
 src/**/*.temp.*
 
-# Compiled files
-*.com
-*.dll
-*.exe
-*.o
-*.so
+# Testing and coverage
+coverage/
+.coverage/
+test-output/
+.tox/
+*.cover
+.hypothesis/
 
-# Packaging
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
+# Environment files
+.env*
+!.env.example
 
-# Database
-*.sqlite
-*.db
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# JVM crash logs
-hs_err_pid*
-
-# Additional temporary files
+# Temporary files
 *~
 *.swp
 *.swo
 *.tmp
 *.temp
 .tmp/
-
-# Additional log patterns
-*.pid
-*.seed
-*.pid.lock
-lerna-debug.log*
-debug.log
 debug/
+
+# Logs
+logs/
+*.log
