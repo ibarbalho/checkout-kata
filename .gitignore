@@ -35,14 +35,6 @@ out/
 .project
 .factorypath
 
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 # OS generated files
 .DS_Store
 .DS_Store?
@@ -84,6 +76,10 @@ yarn-error.log
 .angular/
 dist/
 tmp/
+**/public/*       
+!**/public/.gitkeep  
+src/**/*.generated.*
+src/**/*.temp.*
 
 # Compiled files
 *.com
@@ -108,3 +104,19 @@ tmp/
 
 # JVM crash logs
 hs_err_pid*
+
+# Additional temporary files
+*~
+*.swp
+*.swo
+*.tmp
+*.temp
+.tmp/
+
+# Additional log patterns
+*.pid
+*.seed
+*.pid.lock
+lerna-debug.log*
+debug.log
+debug/
