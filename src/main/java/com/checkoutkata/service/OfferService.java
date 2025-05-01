@@ -6,6 +6,8 @@ import com.checkoutkata.repository.ItemRepository;
 import com.checkoutkata.repository.OfferRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.Objects;
 @Service
 @Transactional
 public class OfferService {
+    private static final Logger logger = LoggerFactory.getLogger(OfferService.class);
+
     private final OfferRepository offerRepository;
     private final ItemRepository itemRepository;
 
@@ -30,8 +34,10 @@ public class OfferService {
                 .orElseThrow(() -> new EntityNotFoundException("Item not found: " + itemId));
 
         Offer offer = new Offer(item, offerData.getQuantity(), offerData.getTotalPrice());
-        offer.setId(null);
-        return offerRepository.save(offer);
+        Offer savedOffer = offerRepository.save(offer);
+        logger.info("Created new offer for item: {}, quantity: {}, price: {}",
+                item.getName(), offer.getQuantity(), offer.getTotalPrice());
+        return savedOffer;
     }
 
     public Offer updateOffer(Long offerId, Offer offerData) {
@@ -42,21 +48,31 @@ public class OfferService {
 
         offer.setQuantity(offerData.getQuantity());
         offer.setTotalPrice(offerData.getTotalPrice());
-        return offerRepository.save(offer);
+        Offer updatedOffer = offerRepository.save(offer);
+        logger.info("Updated offer with id: {}, new quantity: {}, new price: {}",
+                offerId, offerData.getQuantity(), offerData.getTotalPrice());
+        return updatedOffer;
     }
 
     public List<Offer> getAllOffers() {
-        return offerRepository.findAll();
+        List<Offer> offers = offerRepository.findAll();
+        logger.info("Found {} offers", offers.size());
+        return offers;
     }
 
     public Offer getOfferById(Long id) {
+        logger.debug("Fetching offer with id: {}", id);
         return offerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Offer not found: " + id));
     }
 
     public boolean deleteOffer(Long offerId) {
-        if (!offerRepository.existsById(offerId)) return false;
+        if (!offerRepository.existsById(offerId)) {
+            logger.warn("Offer not found with id: {}", offerId);
+            return false;
+        }
         offerRepository.deleteById(offerId);
+        logger.info("Successfully deleted offer with id: {}", offerId);
         return true;
     }
 
