@@ -98,14 +98,13 @@ public class CartService {
         logger.info("Cart cleared");
     }
 
-    public boolean deleteCartItem(Long itemId) {
+    public void deleteCartItem(Long itemId) {
         CartItem cartItem = cartItemRepository.findByItemId(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item not found in cart: " + itemId));
 
         String itemName = cartItem.getItem().getName();
         cartItemRepository.delete(cartItem);
         logger.info("Removed item from cart: {}", itemName);
-        return true;
     }
 
     public CartItem deleteCartItemByQuantity(Long itemId, int decreaseBy) {
