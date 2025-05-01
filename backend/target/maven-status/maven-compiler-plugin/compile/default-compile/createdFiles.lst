@@ -1,0 +1,14 @@
+com/checkoutkata/domain/CartItem.class
+com/checkoutkata/controller/OfferController.class
+com/checkoutkata/repository/OfferRepository.class
+com/checkoutkata/service/ItemService.class
+com/checkoutkata/domain/Item.class
+com/checkoutkata/CheckoutKataApplication.class
+com/checkoutkata/config/DataLoader.class
+com/checkoutkata/service/OfferService.class
+com/checkoutkata/controller/ItemController.class
+com/checkoutkata/repository/ItemRepository.class
+com/checkoutkata/domain/Offer.class
+com/checkoutkata/service/CartService.class
+com/checkoutkata/controller/CartController.class
+com/checkoutkata/repository/CartItemRepository.class
