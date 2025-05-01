@@ -62,13 +62,13 @@ public class ItemService {
 
     public List<Item> getAllItems() {
         List<Item> items = itemRepository.findAll();
-        logger.debug("Found {} items", items.size());
+        logger.info("Found {} items", items.size());
         return items;
     }
 
     public Optional<Item> getItemById(Long id) {
         validateId(id);
-        logger.debug("Fetching item with id: {}", id);
+        logger.info("Fetching item with id: {}", id);
         return itemRepository.findById(id);
     }
 
