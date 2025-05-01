@@ -52,6 +52,16 @@ public class ItemController {
         }
     }
 
+    @PutMapping("/{id}/name")
+    public ResponseEntity<Item> updateItemName(@PathVariable Long id, @RequestBody Item item) {
+        try {
+            Item updated = itemService.updateName(id, item.getName());
+            return ResponseEntity.ok(updated);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         if (itemService.deleteItemById(id)) {

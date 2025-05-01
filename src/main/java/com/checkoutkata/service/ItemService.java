@@ -37,6 +37,19 @@ public class ItemService {
         return updatedItem;
     }
 
+    public Item updateName(Long id, String newName) {
+        validateId(id);
+        validateName(newName);
+
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Item not found with id: " + id));
+
+        item.setName(newName.trim());
+        Item updatedItem = itemRepository.save(item);
+        logger.info("Updated name for item with id: {} to: {}", id, item.getName());
+        return updatedItem;
+    }
+
     public Item createItem(Item item) {
         Objects.requireNonNull(item, "Item cannot be null");
         validatePrice(item.getUnitPrice());
@@ -81,6 +94,13 @@ public class ItemService {
     private void validatePrice(int price) {
         if (price < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
+        }
+    }
+
+    private void validateName(String name) {
+        Objects.requireNonNull(name, "Name cannot be null");
+        if (name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
         }
     }
 }
