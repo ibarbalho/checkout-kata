@@ -42,4 +42,18 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/items/{id}")
+    public ResponseEntity<Void> deleteCartItem(@PathVariable Long id) {
+        cartService.deleteCartItem(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/items/{id}/decrease")
+    public ResponseEntity<?> deleteCartItemByQuantity(@PathVariable Long id, @RequestParam int quantity) {
+        CartItem result = cartService.deleteCartItemByQuantity(id, quantity);
+        return result == null ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.ok(result);
+    }
+
 }
