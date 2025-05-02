@@ -1,8 +1,16 @@
-<mat-toolbar color="primary" class="navbar">
-    <span class="brand">CHECKOUT KATA</span>
-
-    <span class="spacer"></span>
-
-    <button mat-button class="nav-button">Offer</button>
-    <button mat-button class="nav-button">Items</button>
+<mat-toolbar color="primary">
+  <a mat-button routerLink="/">
+    <span class="mat-title">CHECKOUT KATA</span>
+  </a>
+  <span class="mat-toolbar-spacer"></span>
+  <button mat-button 
+          routerLink="/offers" 
+          routerLinkActive="active-link">
+      Offers
+  </button>
+  <button mat-button 
+          routerLink="/items" 
+          routerLinkActive="active-link">
+      Items
+  </button>
 </mat-toolbar>
