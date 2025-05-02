@@ -1,1 +1,56 @@
-<p>product-list works!</p>
+<div class="page-container">
+  <mat-toolbar>
+    <span>
+      Total {{ (total() || 0) / 100 | currency:'EUR' }}
+    </span>
+    <span class="spacer"></span>
+    <button mat-flat-button color="primary" [disabled]="!items().length" (click)="goToCheckout()">
+      Checkout
+    </button>
+  </mat-toolbar>
+
+
+  <div class="product-grid">
+    @for (item of items(); track item.id) {
+    <mat-card class="product-card">
+      <img mat-card-image src="/assets/images/image.png" [alt]="item.name" />
+
+      <mat-card-content>
+        <h3 matTypography="title">{{ item.name }}</h3>
+
+        <p matTypography="body-1">
+          {{ item.unitPrice / 100 | currency:'EUR' }}
+        </p>
+
+        <p matTypography="caption" class="offer-space">
+          @if (item.specialOffer) {
+          <span class="special-offer">{{ item.specialOffer }}</span>
+          }
+        </p>
+
+        <div class="quantity-controls">
+          <button mat-mini-button color="primary" (click)="decreaseQuantity(item)"
+            [disabled]="item.quantity <= 0">−</button>
+          <span>{{ item.quantity }}</span>
+          <button mat-mini-button color="primary" (click)="increaseQuantity(item)">+</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    }
+  </div>
+
+
+
+
+  @if(loading()){
+  <div class="loading-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  @if(error()){
+  <div class="error-message">
+    {{ error() }}
+  </div>
+  }
+</div>

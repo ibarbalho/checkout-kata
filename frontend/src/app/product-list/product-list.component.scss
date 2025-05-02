@@ -1,0 +1,45 @@
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.offer-space {
+  min-height: 24px;
+  margin: 8px 0;
+  text-align: center;
+}
+
+.special-offer {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.spacer {
+  padding-right: 16px;
+}
+
+mat-toolbar {  
+  justify-content: center;  
+}
+
