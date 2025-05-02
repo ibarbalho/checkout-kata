@@ -1,12 +1,12 @@
 import { Component, computed, effect, signal } from '@angular/core';
-import { NgFor, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { Item, ItemService } from '../services/item.service';
 import { CartService } from '../services/cart.service';
-import { Offer, OfferService } from '../services/offer.service';
+import { OfferService } from '../services/offer.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -44,7 +44,7 @@ export class ProductListComponent {
   constructor(private itemService: ItemService,
     readonly cartService: CartService,
     private offerService: OfferService,
-     private router: Router) {
+    private router: Router) {
 
     this.loadData();
 

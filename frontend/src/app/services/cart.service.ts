@@ -12,7 +12,6 @@ export interface CartItem {
   quantity: number;
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +20,6 @@ export class CartService {
 
   readonly items = signal<CartItem[]>([]);
   readonly total = signal(0);
-  readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
   constructor(private http: HttpClient) {
@@ -29,22 +27,18 @@ export class CartService {
   }
 
   private loadCart(): void {
-    this.loading.set(true);
     this.getCartContents();
     this.getCartTotal();
-    this.loading.set(false);
   }
 
   scanItem(id: number): void {
-    this.loading.set(true);
     this.http.post<CartItem>(`${this.apiUrl}/scan/${id}`, {})
       .subscribe({
         next: () => {
           this.getCartContents();
           this.getCartTotal();
         },
-        error: () => this.error.set('Failed to scan item'),
-        complete: () => this.loading.set(false)
+        error: () => this.error.set('Failed to scan item')
       });
   }
 
@@ -65,7 +59,6 @@ export class CartService {
   }
 
   decreaseItem(id: number, quantity: number = 1): void {
-    this.loading.set(true);
     this.http.put<CartItem | null>(`${this.apiUrl}/items/${id}/decrease`, null, {
       params: { quantity: quantity.toString() }
     }).subscribe({
@@ -73,34 +66,29 @@ export class CartService {
         this.getCartContents();
         this.getCartTotal();
       },
-      error: () => this.error.set('Failed to decrease item quantity'),
-      complete: () => this.loading.set(false)
+      error: () => this.error.set('Failed to decrease item quantity')
     });
   }
 
   removeItem(id: number): void {
-    this.loading.set(true);
     this.http.delete(`${this.apiUrl}/items/${id}`)
       .subscribe({
         next: () => {
           this.getCartContents();
           this.getCartTotal();
         },
-        error: () => this.error.set('Failed to remove item'),
-        complete: () => this.loading.set(false)
+        error: () => this.error.set('Failed to remove item')
       });
   }
 
   clearCart(): void {
-    this.loading.set(true);
     this.http.delete(this.apiUrl)
       .subscribe({
         next: () => {
           this.items.set([]);
           this.total.set(0);
         },
-        error: () => this.error.set('Failed to clear cart'),
-        complete: () => this.loading.set(false)
+        error: () => this.error.set('Failed to clear cart')
       });
   }
 }

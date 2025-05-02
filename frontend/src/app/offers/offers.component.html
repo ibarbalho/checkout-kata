@@ -31,7 +31,7 @@
     </mat-card>
     }
 
-    @if (!offerService.offers().length && !offerService.loading()) {
+    @if (!offerService.offers().length) {
     <div class="empty-state">
       <mat-icon>local_offer</mat-icon>
       <p>No offers available</p>
@@ -39,9 +39,4 @@
     }
   </div>
 
-  @if (offerService.loading()) {
-  <div class="loading-overlay">
-    <mat-spinner diameter="48"></mat-spinner>
-  </div>
-  }
 </div>

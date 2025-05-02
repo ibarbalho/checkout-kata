@@ -40,19 +40,19 @@ export class CartComponent {
     this.cartService.removeItem(item.item.id);
   }
 
-  readonly getOffer = computed(() => (item: CartItem) => 
+  readonly getOffer = computed(() => (item: CartItem) =>
     formatOffer(item.item, this.offerService.offers())
   );
 
   readonly calculateItemTotal = computed(() => (item: CartItem) => {
     const offer = this.offerService.offers().find(o => o.item.id === item.item.id);
-    
+
     if (offer && item.quantity >= offer.quantity) {
       const offerGroups = Math.floor(item.quantity / offer.quantity);
       const remainingItems = item.quantity % offer.quantity;
       return (offerGroups * offer.totalPrice + remainingItems * item.item.unitPrice) / 100;
     }
-    
+
     return (item.item.unitPrice * item.quantity) / 100;
   });
 }

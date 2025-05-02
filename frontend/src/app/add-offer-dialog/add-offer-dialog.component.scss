@@ -1,25 +1,24 @@
 mat-form-field {
-    width: 100%;
-  }
-  
-  mat-dialog-actions {
-    justify-content: flex-end;
-    gap: 8px;
-  }
+  width: 100%;
+}
 
-  .dialog-content {
-    min-width: 400px;
-    padding: 16px;
-  }
-  
-  .full-width {
-    width: 100%;
-  }
-  
-  .offer-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 16px;
-  }
-  
+mat-dialog-actions {
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dialog-content {
+  min-width: 400px;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.offer-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}

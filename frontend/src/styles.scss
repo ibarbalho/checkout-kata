@@ -1,113 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-// html,
-// body {
-//   height: 100%;
-// }
-
-// body {
-//   margin: 0;
-//   font-family: Roboto, "Helvetica Neue", sans-serif;
-// }
-
-// .page-container {
-//   max-width: 1200px;
-//   margin: 0 auto;
-//   padding: 16px;
-// }
-
-// .nav-buttons {
-//   display: flex;
-//   gap: 8px;
-// }
-
-// .spacer {
-//   flex: 1 1 auto;
-// }
-
-/* Base styles */
-html, body {
+html,
+body {
   height: 100%;
+}
+
+body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/* Layout */
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px;
 }
 
-/* Grid layouts */
-.grid-layout {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
-}
-
-/* Card patterns */
-.card-content {
+.nav-buttons {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
+  gap: 8px;
 }
 
-/* Common utilities */
 .spacer {
   flex: 1 1 auto;
 }
 
-/* Text styles */
-.title {
-  margin: 0;
-  font-weight: 500;
-}
 
-.subtitle {
-  margin: 4px 0 0;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.highlight-text {
-  color: #4caf50;
-  font-weight: 500;
-}
-
-/* Controls */
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 24px;
-}
-
-/* States */
-.empty-state {
-  text-align: center;
-  padding: 48px;
-  color: rgba(0, 0, 0, 0.6);
-
-  mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 16px;
-  }
-}
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}

@@ -33,12 +33,12 @@ interface OfferData {
   styleUrl: './offers.component.scss'
 })
 export class OffersComponent {
-  
+
   constructor(
     public offerService: OfferService,
     private dialog: MatDialog) {
-    
-      effect(() => {
+
+    effect(() => {
       this.loadOffers();
     });
 
@@ -56,7 +56,7 @@ export class OffersComponent {
     dialogRef.afterClosed().subscribe({
       next: (offerData: OfferData) => {
         if (offerData) {
-          this.loadOffers(); 
+          this.loadOffers();
         }
       }
     });
