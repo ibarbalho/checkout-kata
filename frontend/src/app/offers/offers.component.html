@@ -1,0 +1,47 @@
+<div class="page-container">
+  <mat-toolbar>
+    <mat-icon>local_offer</mat-icon>
+    <span>Special Offers</span>
+    <span class="spacer"></span>
+    <button mat-flat-button color="primary" (click)="openAddOfferDialog()">
+      <mat-icon>add</mat-icon>
+      New Offer
+    </button>
+  </mat-toolbar>
+
+  <div class="offers-grid">
+    @for (offer of offerService.offers(); track offer.item.id) {
+    <mat-card class="offer-card">
+      <mat-card-content>
+        <div class="item-info">
+          <h3 class="item-name">{{ offer.item.name }}</h3>
+          <p class="offer-details">
+            Buy {{ offer.quantity }} for {{ offer.totalPrice / 100 | currency:'EUR' }}
+          </p>
+        </div>
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="editOffer(offer)" aria-label="Edit offer">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteOffer(offer.id)" aria-label="Delete offer">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    }
+
+    @if (!offerService.offers().length && !offerService.loading()) {
+    <div class="empty-state">
+      <mat-icon>local_offer</mat-icon>
+      <p>No offers available</p>
+    </div>
+    }
+  </div>
+
+  @if (offerService.loading()) {
+  <div class="loading-overlay">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+  }
+</div>
