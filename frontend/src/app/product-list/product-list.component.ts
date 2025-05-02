@@ -22,7 +22,6 @@ interface ItemWithQuantity extends Item {
   selector: 'app-product-list',
   standalone: true,
   imports: [
-    NgFor,
     CurrencyPipe,
     MatCardModule,
     MatButtonModule,
