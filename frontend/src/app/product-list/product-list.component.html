@@ -3,8 +3,8 @@
     <span>
       Total {{ (total() || 0) / 100 | currency:'EUR' }}
     </span>
-    <span class="spacer"></span>
-    <button mat-flat-button color="primary" [disabled]="!items().length" (click)="goToCheckout()">
+    <span class="spacer-mat-toolbar"></span>
+    <button mat-flat-button color="primary" [disabled]="!items().length" (click)="goToCart()">
       Checkout
     </button>
   </mat-toolbar>
@@ -38,9 +38,6 @@
     </mat-card>
     }
   </div>
-
-
-
 
   @if(loading()){
   <div class="loading-overlay">

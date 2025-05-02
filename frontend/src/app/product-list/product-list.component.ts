@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { Router, RouterModule } from '@angular/router';
+import { formatOffer } from '../shared/utils';
 
 interface ItemWithQuantity extends Item {
   quantity: number;
@@ -59,15 +60,15 @@ export class ProductListComponent {
           return {
             ...item,
             quantity: cartItem?.quantity ?? 0,
-            specialOffer: this.getSpecialOffer(item, offers)
+            specialOffer: formatOffer(item, offers)
           };
         })
       );
     });
   }
 
-  goToCheckout() {
-    this.router.navigate(['/checkout']);
+  goToCart() {
+    this.router.navigate(['/cart']);
   }
 
   private async loadData(): Promise<void> {
@@ -80,15 +81,10 @@ export class ProductListComponent {
         this.cartService.getCartTotal()
       ]);
     } catch (err) {
-      this.error.set('Erro ao carregar os dados.');
+      this.error.set('Error to load data.');
     } finally {
       this.loading.set(false);
     }
-  }
-
-  private getSpecialOffer(item: Item, offers: Offer[]): string | undefined {
-    const offer = offers.find(o => o.item.id === item.id);
-    return offer ? `${offer.quantity} for €${(offer.totalPrice / 100).toFixed(2)}` : undefined;
   }
 
   increaseQuantity(item: ItemWithQuantity): void {

@@ -1,1 +1,79 @@
-<p>cart works!</p>
+<div class="page-container">
+    <mat-toolbar>
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Cart</span>
+        <span class="spacer"></span>
+        <button mat-flat-button color="primary" routerLink="/items">
+            <mat-icon>arrow_back</mat-icon>
+            Continue Shopping
+        </button>
+    </mat-toolbar>
+
+    <div class="cart-items">
+        @for (item of cartService.items(); track item.id) {
+        <mat-card class="cart-item">
+            <mat-card-content class="cart-item-content">
+                <div class="item-info">
+                    <h3 class="item-title">{{ item.item.name }}</h3>
+                    <p class="item-price">{{ item.item.unitPrice / 100 | currency:'EUR' }}</p>
+                    @if (getOffer()(item)) {
+                        <p class="special-offer">{{ getOffer()(item) }}</p>
+                      }
+                </div>
+
+                <div class="quantity-controls">
+                    <button mat-icon-button color="primary" (click)="decreaseQuantity(item)"
+                        [disabled]="item.quantity <= 1">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <span class="quantity">{{ item.quantity }}</span>
+                    <button mat-icon-button color="primary" (click)="increaseQuantity(item)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+                <div class="item-total">
+                    {{ calculateItemTotal()(item) | currency:'EUR' }}
+                </div>
+
+                <button mat-icon-button color="warn" (click)="removeItem(item)" aria-label="Remove item">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-card-content>
+        </mat-card>
+        }
+    </div>
+
+    @if (!cartService.items().length) {
+    <div class="empty-cart">
+        <mat-icon class="empty-cart-icon">shopping_cart</mat-icon>
+        <p>Your cart is empty</p>
+        <button mat-flat-button color="primary" routerLink="/items">
+            Start Shopping
+        </button>
+    </div>
+    }
+
+    @if (cartService.items().length) {
+    <mat-card class="cart-summary">
+        <mat-card-content>
+            <div class="summary-row">
+                <span>Total</span>
+                <span class="total-amount">
+                    {{ cartService.total() / 100 | currency:'EUR' }}
+                </span>
+            </div>
+            <button mat-flat-button color="primary" class="checkout-button" [disabled]="!cartService.items().length">
+                <mat-icon>shopping_cart_checkout</mat-icon>
+                Pay now
+            </button>
+        </mat-card-content>
+    </mat-card>
+    }
+
+    @if (cartService.loading()) {
+    <div class="loading-overlay">
+        <mat-spinner diameter="48"></mat-spinner>
+    </div>
+    }
+</div>
