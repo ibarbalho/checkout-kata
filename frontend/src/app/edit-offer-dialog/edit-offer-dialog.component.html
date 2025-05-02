@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Edit Offer for {{ data.item.name }}</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Quantity</mat-label>
+    <input matInput 
+           type="number" 
+           [(ngModel)]="data.quantity">    
+  </mat-form-field>
+  
+  <mat-form-field appearance="fill">
+    <mat-label>Total Price (€)</mat-label>
+    <input matInput 
+           type="number" 
+           [(ngModel)]="data.totalPrice"            
+           step="0.01">    
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button 
+          [mat-dialog-close]="data" 
+          color="primary">
+    Save
+  </button>
+</mat-dialog-actions>
