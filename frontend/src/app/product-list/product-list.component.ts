@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { OfferService } from '../services/offer.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { formatOffer } from '../shared/utils';
 
 interface ItemWithQuantity extends Item {
@@ -36,38 +36,34 @@ interface ItemWithQuantity extends Item {
 })
 export class ProductListComponent {
 
+  private readonly itemService = inject(ItemService);
+  private readonly offerService = inject(OfferService);
+  readonly cartService = inject(CartService);
+
   readonly items = signal<ItemWithQuantity[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly total = computed(() => this.cartService.total());
 
-  constructor(private itemService: ItemService,
-    readonly cartService: CartService,
-    private offerService: OfferService,
-    private router: Router) {
-
+  constructor() {
     this.loadData();
-
-    effect(() => {
-      const items = this.itemService.items();
-      const offers = this.offerService.offers();
-      const cartItems = this.cartService.items();
-
-      this.items.set(
-        items.map(item => {
-          const cartItem = cartItems.find(ci => ci.item.id === item.id);
-          return {
-            ...item,
-            quantity: cartItem?.quantity ?? 0,
-            specialOffer: formatOffer(item, offers)
-          };
-        })
-      );
-    });
+    this.setupProductList();
   }
 
-  goToCart() {
-    this.router.navigate(['/cart']);
+  private setupProductList(): void {
+    effect(() => {
+      const [items, offers, cart] = [
+        this.itemService.items(),
+        this.offerService.offers(),
+        this.cartService.items()
+      ];
+
+      this.items.set(items.map(item => ({
+        ...item,
+        quantity: cart.find(ci => ci.item.id === item.id)?.quantity ?? 0,
+        specialOffer: formatOffer(item, offers)
+      })));
+    });
   }
 
   private async loadData(): Promise<void> {
