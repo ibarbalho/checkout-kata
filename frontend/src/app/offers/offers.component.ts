@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Offer, OfferService } from '../services/offer.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -34,29 +34,21 @@ interface OfferData {
 })
 export class OffersComponent {
 
-  constructor(
-    public offerService: OfferService,
-    private dialog: MatDialog) {
-
-    effect(() => {
-      this.loadOffers();
-    });
-
-  }
-
-  private loadOffers(): void {
-    this.offerService.getAllOffers();
-  }
+  private readonly dialog = inject(MatDialog);
+  readonly offerService = inject(OfferService);
 
   openAddOfferDialog(): void {
     const dialogRef = this.dialog.open(AddOfferDialogComponent, {
       width: '400px'
     });
-
+  
     dialogRef.afterClosed().subscribe({
       next: (offerData: OfferData) => {
         if (offerData) {
-          this.loadOffers();
+          this.offerService.createOffer(offerData.itemId, {
+            quantity: offerData.quantity,
+            totalPrice: offerData.totalPrice
+          });
         }
       }
     });

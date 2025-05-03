@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { CartItem, CartService } from '../services/cart.service';
@@ -26,7 +26,8 @@ import { OfferService } from '../services/offer.service';
   styleUrl: './cart.component.scss'
 })
 export class CartComponent {
-  constructor(public cartService: CartService, private offerService: OfferService) { }
+  readonly cartService = inject(CartService);
+  private readonly offerService = inject(OfferService);
 
   increaseQuantity(item: CartItem): void {
     this.cartService.scanItem(item.item.id);
