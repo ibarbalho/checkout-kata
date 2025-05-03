@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -47,10 +48,10 @@ public class CartService {
         return contents;
     }
 
-    public int calculateTotal() {
-        int total = cartItemRepository.findAll().stream()
-                .mapToInt(this::calculateItemTotal)
-                .sum();
+    public BigDecimal calculateTotal() {
+        BigDecimal total = cartItemRepository.findAll().stream()
+                .map(this::calculateItemTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         logger.info("Calculated cart total: {}", total);
         return total;
     }
@@ -71,22 +72,28 @@ public class CartService {
         return saved;
     }
 
-    private int calculateItemTotal(CartItem cartItem) {
+    private BigDecimal calculateItemTotal(CartItem cartItem) {
         Item item = cartItem.getItem();
         int quantity = cartItem.getQuantity();
-        int total = offerRepository.findByItem(item)
+        BigDecimal total = offerRepository.findByItem(item)
                 .map(offer -> calculateWithOffer(offer, quantity, item.getUnitPrice()))
-                .orElseGet(() -> quantity * item.getUnitPrice());
+                .orElseGet(() -> item.getUnitPrice().multiply(BigDecimal.valueOf(quantity)));
 
         logger.info("Calculated total for item: {}, quantity: {}, total: {}",
                 item.getName(), quantity, total);
         return total;
     }
 
-    private int calculateWithOffer(Offer offer, int quantity, int unitPrice) {
+    private BigDecimal calculateWithOffer(Offer offer, int quantity, BigDecimal unitPrice) {
         int offerGroups = quantity / offer.getQuantity();
         int remainder = quantity % offer.getQuantity();
-        int total = (offerGroups * offer.getTotalPrice()) + (remainder * unitPrice);
+
+        BigDecimal offerTotal = BigDecimal.valueOf(offerGroups)
+                .multiply(offer.getTotalPrice());
+        BigDecimal remainderTotal = BigDecimal.valueOf(remainder)
+                .multiply(unitPrice);
+
+        BigDecimal total = offerTotal.add(remainderTotal);
 
         logger.info("Applied offer: {} groups of {}, remainder: {}, total: {}",
                 offerGroups, offer.getQuantity(), remainder, total);

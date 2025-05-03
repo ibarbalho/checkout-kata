@@ -1,7 +1,7 @@
 <div class="page-container">
   <mat-toolbar>
     <span>
-      Total {{ (total() || 0) / 100 | currency:'EUR' }}
+      Total {{ total() | currency:'EUR' }}
     </span>
     <span class="spacer-mat-toolbar"></span>
     <button mat-flat-button color="primary" [disabled]="!items().length" routerLink="/cart">
@@ -19,7 +19,7 @@
         <h3 matTypography="title">{{ item.name }}</h3>
 
         <p matTypography="body-1">
-          {{ item.unitPrice / 100 | currency:'EUR' }}
+          {{ item.unitPrice | currency:'EUR' }}
         </p>
 
         <p matTypography="caption" class="offer-space">

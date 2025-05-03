@@ -41,9 +41,14 @@ export class CartComponent {
     this.cartService.removeItem(item.item.id);
   }
 
-  readonly getOffer = computed(() => (item: CartItem) =>
-    formatOffer(item.item, this.offerService.offers())
-  );
+  readonly getOffer = computed(() => (item: CartItem) => {
+    const cartItem = {
+      ...item.item,
+      unitPrice: item.item.unitPrice.toString()
+    };
+
+    return formatOffer(cartItem, this.offerService.offers());
+  });
 
   readonly calculateItemTotal = computed(() => (item: CartItem) => {
     const offer = this.offerService.offers().find(o => o.item.id === item.item.id);
@@ -51,9 +56,22 @@ export class CartComponent {
     if (offer && item.quantity >= offer.quantity) {
       const offerGroups = Math.floor(item.quantity / offer.quantity);
       const remainingItems = item.quantity % offer.quantity;
-      return (offerGroups * offer.totalPrice + remainingItems * item.item.unitPrice) / 100;
+      
+      const offerTotal = this.multiply(offer.totalPrice.toString(), offerGroups);
+      
+      const remainingTotal = this.multiply(item.item.unitPrice.toString(), remainingItems);
+      
+      return this.add(offerTotal, remainingTotal);
     }
 
-    return (item.item.unitPrice * item.quantity) / 100;
+    return this.multiply(item.item.unitPrice.toString(), item.quantity);
   });
+
+  private multiply(price: string, quantity: number): string {
+    return (parseFloat(price) * quantity).toFixed(2);
+  }
+
+  private add(price1: string, price2: string): string {
+    return (parseFloat(price1) + parseFloat(price2)).toFixed(2);
+  }
 }

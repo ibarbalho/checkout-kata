@@ -5,7 +5,7 @@
     <mat-select [(value)]="selectedItemId">
       @for (item of itemService.items(); track item.id) {
       <mat-option [value]="item.id">
-        {{ item.name }} - {{ item.unitPrice / 100 | currency:'EUR' }}
+        {{ item.name }} - {{ item.unitPrice | currency:'EUR' }}
       </mat-option>
       }
     </mat-select>
@@ -20,7 +20,12 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Total Price</mat-label>
-      <input matInput type="number" [(ngModel)]="totalPrice">
+      <input matInput 
+             type="number" 
+             [(ngModel)]="totalPrice"
+             step="0.01"  
+             min="0.01" 
+             required>
     </mat-form-field>
   </div>
   }

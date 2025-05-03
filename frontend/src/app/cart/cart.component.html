@@ -15,7 +15,7 @@
             <mat-card-content class="cart-item-content">
                 <div class="item-info">
                     <h3 class="item-title">{{ item.item.name }}</h3>
-                    <p class="item-price">{{ item.item.unitPrice / 100 | currency:'EUR' }}</p>
+                    <p class="item-price">{{ item.item.unitPrice | currency:'EUR' }}</p>
                     @if (getOffer()(item)) {
                         <p class="special-offer">{{ getOffer()(item) }}</p>
                       }
@@ -60,7 +60,7 @@
             <div class="summary-row">
                 <span>Total</span>
                 <span class="total-amount">
-                    {{ cartService.total() / 100 | currency:'EUR' }}
+                    {{ cartService.total() | currency:'EUR' }}
                 </span>
             </div>
             <button mat-flat-button color="primary" class="checkout-button" [disabled]="!cartService.items().length">

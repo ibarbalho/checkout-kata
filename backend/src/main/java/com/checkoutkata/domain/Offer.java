@@ -2,6 +2,8 @@ package com.checkoutkata.domain;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 public class Offer {
 
@@ -11,7 +13,7 @@ public class Offer {
 
     private int quantity;
 
-    private int totalPrice;
+    private BigDecimal totalPrice;
 
     @OneToOne
     private Item item;
@@ -20,7 +22,7 @@ public class Offer {
 
     }
 
-    public Offer(Item item, int quantity, int totalPrice) {
+    public Offer(Item item, int quantity, BigDecimal totalPrice) {
         this.item = item;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
@@ -42,11 +44,11 @@ public class Offer {
         this.quantity = quantity;
     }
 
-    public int getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

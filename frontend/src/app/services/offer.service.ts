@@ -5,11 +5,11 @@ import { environment } from '../../environments/environment';
 export interface Offer {
   id: number;
   quantity: number;
-  totalPrice: number;
+  totalPrice: string;
   item: {
     id: number;
     name: string;
-    unitPrice: number;
+    unitPrice: string;
   };
 }
 

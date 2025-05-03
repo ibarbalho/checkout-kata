@@ -30,36 +30,27 @@ export class ItemsComponent {
   readonly itemService = inject(ItemService);
  
   openAddItemDialog(): void {
-    const dialogRef = this.dialog.open(AddItemDialogComponent, {
+    this.dialog.open(AddItemDialogComponent, {
       width: '400px'
-    });
-  
-    dialogRef.afterClosed().subscribe({
-      next: (result) => {
-        if (result) {
-          this.itemService.createItem(result);
-        }
-      },
-      error: (error) => {
-        console.error('Error adding item:', error);
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.itemService.createItem(result);
       }
     });
   }
 
   editItem(item: Item): void {
-    const dialogRef = this.dialog.open(EditItemDialogComponent, {
+    this.dialog.open(EditItemDialogComponent, {
       width: '400px',
       data: { ...item }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (result.name !== item.name) {
-          this.itemService.updateItemName(item.id, result.name);
-        }
-        if (result.unitPrice !== item.unitPrice) {
-          this.itemService.updateItemPrice(item.id, result.unitPrice);
-        }
+    }).afterClosed().subscribe(result => {
+      if (!result) return; 
+      
+      if (result.name !== item.name) {
+        this.itemService.updateItemName(item.id, result.name);
+      }
+      if (parseFloat(result.unitPrice) !== parseFloat(item.unitPrice)) {
+        this.itemService.updateItemPrice(item.id, result.unitPrice);
       }
     });
   }

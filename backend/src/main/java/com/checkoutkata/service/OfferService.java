@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,7 +81,7 @@ public class OfferService {
         if (offer.getQuantity() <= 0) {
             throw new IllegalArgumentException("Offer quantity must be positive");
         }
-        if (offer.getTotalPrice() < 0) {
+        if (offer.getTotalPrice().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Offer price cannot be negative");
         }
     }

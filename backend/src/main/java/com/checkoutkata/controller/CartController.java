@@ -5,6 +5,7 @@ import com.checkoutkata.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class CartController {
     }
 
     @GetMapping("/total")
-    public ResponseEntity<Map<String, Integer>> getCartTotal() {
+    public ResponseEntity<Map<String, BigDecimal>> getCartTotal() {
         return ResponseEntity.ok(Map.of("total", cartService.calculateTotal()));
     }
 

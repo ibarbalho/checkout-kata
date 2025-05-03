@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 export interface Item {
   id: number;
   name: string;
-  unitPrice: number;
+  unitPrice: string;
 }
 
 @Injectable({
@@ -55,7 +55,7 @@ export class ItemService {
   }
 
   // PUT /items/:id
-  updateItemPrice(id: number, price: number): void {
+  updateItemPrice(id: number, price: string): void {
     const updateData = { id, unitPrice: price } as Item;
 
     this.http.put<Item>(`${this.apiUrl}/${id}`, updateData)

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class CartServiceTest {
 
     @Test
     void shouldAddNewItemToCart() {
-        Item item = new Item("Apple", 50);
+        Item item = new Item("Apple", BigDecimal.valueOf(50));
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
         when(cartItemRepository.findByItemId(1L)).thenReturn(Optional.empty());
         when(cartItemRepository.save(any())).thenReturn(new CartItem(item, 1));
@@ -51,25 +52,25 @@ public class CartServiceTest {
         assertThat(result.getItem()).isEqualTo(item);
     }
 
-    @Test
+       @Test
     void shouldCalculateTotalWithOffer() {
-        Item item = new Item("Apple", 50);
+        Item item = new Item("Apple", BigDecimal.valueOf(50));
         CartItem cartItem = new CartItem(item, 3);
-        Offer offer = new Offer(item, 2, 80);
+        Offer offer = new Offer(item, 2, BigDecimal.valueOf(80));
 
         when(cartItemRepository.findAll()).thenReturn(List.of(cartItem));
         when(offerRepository.findByItem(item)).thenReturn(Optional.of(offer));
 
-        int total = cartService.calculateTotal();
+        BigDecimal total = cartService.calculateTotal();
 
-        assertThat(total).isEqualTo(130);
+        assertThat(total).isEqualTo(BigDecimal.valueOf(130));
     }
 
     @Test
     void shouldGetCartContents() {
         List<CartItem> items = List.of(
-                new CartItem(new Item("Apple", 50), 1),
-                new CartItem(new Item("Banana", 30), 2)
+                new CartItem(new Item("Apple", BigDecimal.valueOf(50)), 1),
+                new CartItem(new Item("Banana", BigDecimal.valueOf(30)), 2)
         );
         when(cartItemRepository.findAll()).thenReturn(items);
 

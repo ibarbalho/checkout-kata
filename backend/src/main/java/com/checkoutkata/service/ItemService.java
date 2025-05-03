@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public Item updatePrice(Long id, int newPrice) {
+    public Item updatePrice(Long id, BigDecimal newPrice) {
         validateId(id);
         validatePrice(newPrice);
 
@@ -91,8 +92,8 @@ public class ItemService {
         }
     }
 
-    private void validatePrice(int price) {
-        if (price < 0) {
+    private void validatePrice(BigDecimal price) {
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
     }

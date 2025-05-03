@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ public class ItemServiceTest {
 
     @Test
     void createItem_ShouldSaveAndReturnItem() {
-        Item item = new Item("Apple", 50);
+        Item item = new Item("Apple", BigDecimal.valueOf(50));
         when(itemRepository.save(any(Item.class))).thenReturn(item);
 
         Item result = itemService.createItem(item);
@@ -44,20 +45,23 @@ public class ItemServiceTest {
 
     @Test
     void updatePrice_ShouldUpdateAndReturnItem() {
-        Item item = new Item("Apple", 50);
-        Item updatedItem = new Item("Apple", 60);
+        Item item = new Item("Apple", BigDecimal.valueOf(50));
+        Item updatedItem = new Item("Apple", BigDecimal.valueOf(60));
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
         when(itemRepository.save(any(Item.class))).thenReturn(updatedItem);
 
-        Item result = itemService.updatePrice(1L, 60);
+        Item result = itemService.updatePrice(1L, BigDecimal.valueOf(60));
 
-        assertThat(result.getUnitPrice()).isEqualTo(60);
+        assertThat(result.getUnitPrice()).isEqualTo(BigDecimal.valueOf(60));
         verify(itemRepository).save(any(Item.class));
     }
 
     @Test
     void getAllItems_ShouldReturnAllItems() {
-        List<Item> items = List.of(new Item("Apple", 50), new Item("Orange", 30));
+        List<Item> items = List.of(
+                new Item("Apple", BigDecimal.valueOf(50)),
+                new Item("Orange", BigDecimal.valueOf(30))
+        );
         when(itemRepository.findAll()).thenReturn(items);
 
         List<Item> result = itemService.getAllItems();
@@ -81,7 +85,7 @@ public class ItemServiceTest {
         when(itemRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () ->
-                itemService.updatePrice(1L, 60)
+                itemService.updatePrice(1L, BigDecimal.valueOf(60))
         );
     }
 }

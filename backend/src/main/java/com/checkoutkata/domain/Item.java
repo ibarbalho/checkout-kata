@@ -1,6 +1,8 @@
 package com.checkoutkata.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
 
 @Entity
 public class Item {
@@ -11,12 +13,14 @@ public class Item {
 
     private String name;
 
-    private int unitPrice;
+    @Column(precision = 6, scale = 2)
+    @DecimalMin(value = "0.0", inclusive = true, message = "Price must be zero or positive")
+    private BigDecimal unitPrice;
 
     public Item() {
     }
 
-    public Item(String name, int unitPrice) {
+    public Item(String name, BigDecimal unitPrice) {
         this.name = name;
         this.unitPrice = unitPrice;
     }
@@ -29,7 +33,7 @@ public class Item {
         return name;
     }
 
-    public int getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
@@ -41,7 +45,7 @@ public class Item {
         this.name = name;
     }
 
-    public void setUnitPrice(int unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 }
