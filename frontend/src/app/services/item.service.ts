@@ -19,6 +19,7 @@ export class ItemService {
   readonly selectedItem = signal<Item | null>(null);
   readonly createdItem = signal<Item | null>(null);
   readonly updatedItem = signal<Item | null>(null);
+  readonly error = signal<string | null>(null);
 
   constructor(private http: HttpClient) { }
 
@@ -98,16 +99,19 @@ export class ItemService {
 
   // DELETE /items/:id
   deleteItem(id: number): void {
-    this.http.delete<void>(`${this.apiUrl}/${id}`)
-      .subscribe({
-        next: () => {
-          this.items.update(items =>
-            items.filter(item => item.id !== id)
-          );
-        },
-        error: (error) => {
-          console.error('Error deleting item:', error);
+    this.http.delete<void>(`${this.apiUrl}/${id}`).subscribe({
+      next: () => {
+        this.items.update(items => items.filter(item => item.id !== id));
+        this.error.set(null);
+      },
+      error: (error) => {
+        if (error.status === 409 || error.status === 500) {
+          this.error.set('Cannot delete item that has associated offers');
+        } else {
+          this.error.set('Error deleting item');
         }
-      });
+        console.error('Error deleting item:', error);
+      }
+    });
   }
 }

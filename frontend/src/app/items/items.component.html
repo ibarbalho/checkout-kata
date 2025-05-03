@@ -1,1 +1,41 @@
-<p>items works!</p>
+<div class="page-container">
+    <mat-toolbar>
+        <mat-icon>inventory_2</mat-icon>
+        <span>Items</span>
+        <span class="spacer"></span>
+        <button mat-flat-button color="primary">
+            <mat-icon>add</mat-icon>
+            New Item
+        </button>
+    </mat-toolbar>
+
+    <div class="items-grid">
+        @for (item of itemService.items(); track item.id) {
+        <mat-card class="item-card">
+            <mat-card-content>
+                <div class="item-info">
+                    <h3 class="item-name">{{ item.name }}</h3>
+                    <p class="item-details">
+                        Price: {{ item.unitPrice / 100 | currency:'EUR' }}
+                    </p>
+                </div>
+                <div class="card-actions">
+                    <button mat-icon-button color="primary" (click)="editItem(item)" aria-label="Edit item">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteItem(item.id)" aria-label="Delete item">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        }
+
+        @if (!itemService.items().length) {
+        <div class="empty-state">
+            <mat-icon>inventory_2</mat-icon>
+            <p>No items available</p>
+        </div>
+        }
+    </div>
+</div>
