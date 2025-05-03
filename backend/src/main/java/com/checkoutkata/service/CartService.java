@@ -14,6 +14,11 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
+/*
+ * CartService is responsible for managing the shopping cart.
+ * It allows adding items, calculating totals, applying offers,
+ * and managing cart contents.
+ */
 @Service
 @Transactional
 public class CartService {
@@ -30,6 +35,12 @@ public class CartService {
         this.offerRepository = offerRepository;
     }
 
+    /**
+     * Adds an item to the cart. If the item already exists, increments its quantity.
+     * @param itemId ID of the item to add
+     * @return The updated or created cart item
+     * @throws IllegalArgumentException if item not found
+     */
     public CartItem addToCart(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item not found: " + itemId));
@@ -42,12 +53,20 @@ public class CartService {
         return cartItem;
     }
 
+    /**
+     * Retrieves all items currently in the cart.
+     * @return List of cart items
+     */
     public List<CartItem> getCartContents() {
         List<CartItem> contents = cartItemRepository.findAll();
         logger.info("Retrieved {} items from cart", contents.size());
         return contents;
     }
 
+    /**
+     * Calculates the total price of all items in the cart, applying any available offers.
+     * @return Total price as BigDecimal
+     */
     public BigDecimal calculateTotal() {
         BigDecimal total = cartItemRepository.findAll().stream()
                 .map(this::calculateItemTotal)
@@ -56,6 +75,11 @@ public class CartService {
         return total;
     }
 
+    /**
+     * Increments the quantity of an existing cart item by 1.
+     * @param item The cart item to update
+     * @return The updated cart item after saving
+     */
     private CartItem incrementQuantity(CartItem item) {
         item.setQuantity(item.getQuantity() + 1);
         CartItem updated = cartItemRepository.save(item);
@@ -63,6 +87,11 @@ public class CartService {
         return updated;
     }
 
+    /**
+     * Creates a new cart item with quantity 1.
+     * @param item The item to add to cart
+     * @return The newly created and saved cart item
+     */
     private CartItem createNewCartItem(Item item) {
         CartItem cartItem = new CartItem();
         cartItem.setItem(item);
@@ -72,6 +101,11 @@ public class CartService {
         return saved;
     }
 
+    /**
+     * Calculates the total price for a cart item, applying any available offers.
+     * @param cartItem The cart item to calculate total for
+     * @return The total price for this item considering quantity and offers
+     */
     private BigDecimal calculateItemTotal(CartItem cartItem) {
         Item item = cartItem.getItem();
         int quantity = cartItem.getQuantity();
@@ -84,6 +118,16 @@ public class CartService {
         return total;
     }
 
+    /**
+     * Calculates the total price for items when an offer is applicable.
+     * Handles partial offer applications by calculating both the offer price
+     * for complete groups and regular price for remaining items.
+     *
+     * @param offer     The offer to apply (contains quantity and special price)
+     * @param quantity  Total quantity of items
+     * @param unitPrice Regular price per item
+     * @return Total price after applying the offer
+     */
     private BigDecimal calculateWithOffer(Offer offer, int quantity, BigDecimal unitPrice) {
         int offerGroups = quantity / offer.getQuantity();
         int remainder = quantity % offer.getQuantity();
@@ -100,11 +144,19 @@ public class CartService {
         return total;
     }
 
+    /**
+     * Removes all items from the cart.
+     */
     public void clearCart() {
         cartItemRepository.deleteAll();
         logger.info("Cart cleared");
     }
 
+    /**
+     * Completely removes an item from the cart regardless of quantity.
+     * @param itemId ID of the item to remove
+     * @throws IllegalArgumentException if item not found in cart
+     */
     public void deleteCartItem(Long itemId) {
         CartItem cartItem = cartItemRepository.findByItemId(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item not found in cart: " + itemId));
@@ -114,6 +166,14 @@ public class CartService {
         logger.info("Removed item from cart: {}", itemName);
     }
 
+    /**
+     * Decreases the quantity of an item in the cart by the specified amount.
+     * Removes the item if quantity reaches zero.
+     * @param itemId ID of the item
+     * @param decreaseBy Amount to decrease
+     * @return Updated cart item or null if item was removed
+     * @throws IllegalArgumentException if item not found or decreaseBy <= 0
+     */
     public CartItem deleteCartItemByQuantity(Long itemId, int decreaseBy) {
         if (decreaseBy <= 0) {
             throw new IllegalArgumentException("Decrease amount must be positive");

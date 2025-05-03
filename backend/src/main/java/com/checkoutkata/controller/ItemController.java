@@ -23,12 +23,21 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    /**
+     * Retrieves all items from the inventory.
+     * @return ResponseEntity containing list of all items
+     */
     @GetMapping
     public ResponseEntity<List<Item>> getAllItems() {
         List<Item> items = itemService.getAllItems();
         return ResponseEntity.ok(items);
     }
 
+    /**
+     * Retrieves a specific item by its ID.
+     * @param id ID of the item to retrieve
+     * @return ResponseEntity with item if found, or 404 if not found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Item> getItemById(@PathVariable Long id) {
         return itemService.getItemById(id)
@@ -36,12 +45,23 @@ public class ItemController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Creates a new item in the inventory.
+     * @param item Item to create
+     * @return ResponseEntity with created item and 201 status
+     */
     @PostMapping
     public ResponseEntity<Item> createItem(@RequestBody Item item) {
         Item created = itemService.createItem(item);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    /**
+     * Updates the price of an existing item.
+     * @param id ID of the item to update
+     * @param itemBody Item object containing new price
+     * @return ResponseEntity with updated item, or 404 if not found
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Item> updateItemPrice(@PathVariable Long id, @RequestBody Item itemBody) {
         try {
@@ -52,6 +72,12 @@ public class ItemController {
         }
     }
 
+    /**
+     * Updates the name of an existing item.
+     * @param id ID of the item to update
+     * @param item Item object containing new name
+     * @return ResponseEntity with updated item, or 404 if not found
+     */
     @PutMapping("/{id}/name")
     public ResponseEntity<Item> updateItemName(@PathVariable Long id, @RequestBody Item item) {
         try {
@@ -62,6 +88,11 @@ public class ItemController {
         }
     }
 
+    /**
+     * Deletes an item from the inventory.
+     * @param id ID of the item to delete
+     * @return ResponseEntity with 204 if deleted, or 404 if not found
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         if (itemService.deleteItemById(id)) {
