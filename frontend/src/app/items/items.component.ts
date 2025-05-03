@@ -37,11 +37,7 @@ export class ItemsComponent {
     dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (result) {
-          this.itemService.createItem({
-            id: Date.now(),
-            name: result.name,
-            unitPrice: result.unitPrice
-          });
+          this.itemService.createItem(result);
         }
       },
       error: (error) => {
