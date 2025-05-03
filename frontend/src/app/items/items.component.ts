@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Item, ItemService } from '../services/item.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { EditItemDialogComponent } from '../edit-item-dialog/edit-item-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AddItemDialogComponent } from '../add-item-dialog/add-item-dialog.component';
 
 @Component({
   selector: 'app-items',
@@ -24,10 +25,29 @@ import { MatDialogModule } from '@angular/material/dialog';
   styleUrl: './items.component.scss'
 })
 export class ItemsComponent {
-  private readonly dialog = inject(MatDialog);
 
-  constructor(public itemService: ItemService) {
-    this.itemService.getAllItems();
+  private readonly dialog = inject(MatDialog);
+  readonly itemService = inject(ItemService);
+ 
+  openAddItemDialog(): void {
+    const dialogRef = this.dialog.open(AddItemDialogComponent, {
+      width: '400px'
+    });
+  
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) {
+          this.itemService.createItem({
+            id: Date.now(),
+            name: result.name,
+            unitPrice: result.unitPrice
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error adding item:', error);
+      }
+    });
   }
 
   editItem(item: Item): void {
