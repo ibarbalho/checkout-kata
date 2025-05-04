@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "630a75b4-7f78-42da-9ecb-4b23cfb3789e",
+		"name": "Checkout Kata - Offer-controller",
+		"description": "Postman collection for testing the Checkout Kata project.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10638584"
+	},
+	"item": [
+		{
+			"name": "Get All Offers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/offers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Offer for Item",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"quantity\": 3,\n  \"totalPrice\": 25\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/offers/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offers",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Offer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"quantity\": 2,\n  \"totalPrice\": 46\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/offers/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Offer",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/offers/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

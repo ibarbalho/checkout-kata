@@ -25,3 +25,6 @@ It simulates a real-world supermarket checkout system that calculates the total 
 
 # API Documentation
 Access Swagger UI at: http://localhost:8080/swagger-ui.html
+
+# Postman scripts
+Postman test scripts are located in the `postman` folder.
